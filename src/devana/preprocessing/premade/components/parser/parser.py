@@ -45,7 +45,7 @@ class Parser(ISource):
             result += cls._find_enum(arg)
         return result
 
-    def _create_call_frame(self, function: FunctionEntity, parent: ISyntaxElement) -> Environment.CallingData:
+    def _create_calling_data(self, function: FunctionEntity, parent: ISyntaxElement) -> Environment.CallingData:
         arguments = self._arguments_parser.tokenize(function.arguments)
         positional_arguments: List[CallFrame.Arguments.Value] = []
         named_arguments: Dict[str, CallFrame.Arguments.Value] = {}
@@ -88,7 +88,7 @@ class Parser(ISource):
         for data in self._extractor.extract():
             functions = function_parser.parse(data.text)
             for function in functions:
-                result.append(self._create_call_frame(function, data.parent))
+                result.append(self._create_calling_data(function, data.parent))
         return result
 
 
@@ -106,10 +106,10 @@ class FilterableParser(Parser):
             self,
             extractor: IExtractor,
             signatures: List[Signature],
-            call_data_callback: Callable[[FunctionEntity, ISyntaxElement], Optional[Environment.CallingData[ISyntaxElement]]]
+            calling_data_callback: Callable[[FunctionEntity, ISyntaxElement], Optional[Environment.CallingData[ISyntaxElement]]]
     ):
         super().__init__(extractor, signatures)
-        self._call_data_callback = call_data_callback
+        self._calling_data_callback = calling_data_callback
 
     def feed(self) -> List[Environment.CallingData[ISyntaxElement]]:
         result = []
@@ -117,6 +117,6 @@ class FilterableParser(Parser):
         for data in self._extractor.extract():
             functions = function_parser.parse(data.text)
             for function in functions:
-                call_frame = self._call_data_callback(function, data.parent) or self._create_call_frame(function, data.parent)
+                call_frame = self._calling_data_callback(function, data.parent) or self._create_calling_data(function, data.parent)
                 result.append(call_frame)
         return result
