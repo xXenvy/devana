@@ -7,9 +7,9 @@ from devana.preprocessing.premade.components.parser.argumentsparser import (Argu
 from devana.preprocessing.premade.components.parser.functionparser import FunctionParser
 from devana.preprocessing.premade.components.parser.typechecker import is_arguments_valid
 from devana.preprocessing.premade.components.executor.executable import CallFrame, Signature
-from devana.preprocessing.preprocessor import ISource
-from devana.syntax_abstraction.syntax import ISyntaxElement
 from devana.preprocessing.premade.components.executor.environment import Environment
+from devana.syntax_abstraction.syntax import ISyntaxElement
+from devana.preprocessing.preprocessor import ISource
 
 
 class Parser(ISource):
@@ -48,7 +48,6 @@ class Parser(ISource):
     @classmethod
     def get_produced_type(cls) -> Type:
         return Environment.CallingData
-
 
     def feed(self) -> List[Environment.CallingData[ISyntaxElement]]:
         result = []

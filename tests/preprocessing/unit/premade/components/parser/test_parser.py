@@ -1,5 +1,5 @@
 import unittest
-from typing import List
+from typing import List, Optional
 from enum import Enum, auto
 from devana.preprocessing.premade.components.parser.parser import Parser, Signature
 from devana.preprocessing.premade.components.parser.extractor import IExtractor, ExtractedFunction
